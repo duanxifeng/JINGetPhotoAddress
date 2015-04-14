@@ -1,0 +1,2 @@
+# JINGetPhotoAddress
+获取照片exif信息，利用百度地图SDK获取经纬度对应地理
