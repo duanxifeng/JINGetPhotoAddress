@@ -62,13 +62,7 @@ public class MainActivity extends Activity {
     private SDKReceiver mReceiver;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // this.getApplication();
         setContentView(R.layout.activity_main);
-//        mBMapManager = new BMapManager(getApplication());
-//        mBMapManager.init(baiduMapKey,null);
-//        // 初始化MKSearch
-//        mMKSearch = new MKSearch();
-//        mMKSearch.init(mBMapManager, new MySearchListener());
         mSearch = GeoCoder.newInstance();
         mSearch.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
             @Override
