@@ -52,7 +52,7 @@ public class MainActivity extends Activity {
             TextView text = (TextView) findViewById(R.id.txtView);
             text.setTextColor(Color.RED);
             if (s.equals(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_ERROR)) {
-                text.setText("key 验证出错! 请在 AndroidManifest.xml 文件中检查 key 设置");
+                //text.setText("key 验证出错! 请在 AndroidManifest.xml 文件中检查 key 设置");
             } else if (s
                     .equals(SDKInitializer.SDK_BROADCAST_ACTION_STRING_NETWORK_ERROR)) {
                 text.setText("网络出错");
