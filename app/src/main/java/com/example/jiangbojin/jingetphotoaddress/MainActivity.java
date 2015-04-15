@@ -1,4 +1,4 @@
-package com.example.jiangbojin.mygetphotoinfo;
+package com.example.jiangbojin.jingetphotoaddress;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -52,7 +52,7 @@ public class MainActivity extends Activity {
             TextView text = (TextView) findViewById(R.id.txtView);
             text.setTextColor(Color.RED);
             if (s.equals(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_ERROR)) {
-                //text.setText("key 验证出错! 请在 AndroidManifest.xml 文件中检查 key 设置");
+                text.setText("key 验证出错! 请在 AndroidManifest.xml 文件中检查 key 设置");
             } else if (s
                     .equals(SDKInitializer.SDK_BROADCAST_ACTION_STRING_NETWORK_ERROR)) {
                 text.setText("网络出错");
@@ -63,6 +63,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SDKInitializer.initialize(this.getApplication());
         mSearch = GeoCoder.newInstance();
         mSearch.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
             @Override
@@ -178,15 +179,30 @@ public class MainActivity extends Activity {
         ExifInterface exifInterface = new ExifInterface(path);
         String longitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
         String latitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
-        Double longitudeDb = 116.327764;//Double.valueOf(longitude);
-        Double latitudeDb = 39.904965;//Double.valueOf(latitude);
-
-        String date = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
-        int width = exifInterface.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, -1);
-        String type = exifInterface.getAttribute(ExifInterface.TAG_MODEL);
-        LatLng ptCenter = new LatLng(longitudeDb,latitudeDb);
+        if (longitude.isEmpty() || latitude.isEmpty())
+        {
+            TextView tv = (TextView)findViewById(R.id.txtView);
+            tv.setText("未获取到图片的经纬度信息");
+            return;
+        }
+        Double longitudeDb = getDoubleTypeFromString(longitude) +0.012691;
+        Double latitudeDb = getDoubleTypeFromString(latitude) +0.007080;
+        LatLng ptCenter = new LatLng(latitudeDb,longitudeDb);
         // 反Geo搜索
         mSearch.reverseGeoCode(new ReverseGeoCodeOption()
                 .location(ptCenter));
+    }
+    protected double getDoubleTypeFromString(String str)
+    {
+        String strS[] = str.split(",");
+        String duS[] = strS[0].split("/");
+        String fenS[] = strS[1].split("/");
+        String miaoS[] = strS[2].split("/");
+        Double du = Double.valueOf(duS[0]) / Double.valueOf(duS[1]);
+        Double fen = Double.valueOf(fenS[0]) / Double.valueOf(fenS[1]);
+        Double miao = Double.valueOf(miaoS[0]) / Double.valueOf(miaoS[1]);
+        if(du<0)
+            return -(Math.abs(du)+(fen+(miao/60))/60);
+        return du+(fen+(miao/60))/60;
     }
 }

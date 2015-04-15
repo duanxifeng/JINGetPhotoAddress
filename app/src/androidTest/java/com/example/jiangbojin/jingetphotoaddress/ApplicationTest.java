@@ -1,4 +1,4 @@
-package com.example.jiangbojin.mygetphotoinfo;
+package com.example.jiangbojin.jingetphotoaddress;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
